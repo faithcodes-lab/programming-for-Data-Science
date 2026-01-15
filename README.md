@@ -55,7 +55,20 @@ From a data scientist point of view, dropping that amount seems to violate data 
 
 
 ### Q2.3 Hypothesis Testing
-Making use of the filtered dataset which was suitable for correlation analysis test, this task was straightforward and easy to provide interpreataion to the results of the test. Implementation was simplied and results showed a significant correlation validating findings from q2.1.    
+Making use of the filtered dataset which was suitable for correlation analysis test, this task was straightforward and easy to provide interpreataion to the results of the test. Implementation was simplied and results showed a significant correlation validating findings from q2.1.
+
+### Git Version control
+
+The use of git initially felt challenging in the beginning of this assessment, but after a couple of errors (like commiting to the wrong notebook, using wrong git commands) and solving them i was able to get comfortable using it. Apart from the basic git command i learnt other commands like 
+ 
+- git init : Initialised the repository to local folder. 
+- git log :view commit history.
+- ls (list of files to confirm my coursework location.
+- zip -r<archive name>.zip<folder name > : usd tot zip my course wrok folder instead of doing it locally.
+- pwd :verify my local working directory
+- rm<file>/rm -r<folder> :remove unwanted file and folder in the course work folder.
+- .gitignore: exclude unnecessary system files and ipynb checkpoints folder in the course work folder.
+overall using these command was a rewarding experience.
 
 ### Conclusion
 This tasks was highly interractive as it took me through each phase of data science data handling process, from using only python inbulit function to using external libraries for exploratory data analysis, to data cleaning, data validation and hypothesis testing to support insights.
