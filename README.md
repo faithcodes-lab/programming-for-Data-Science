@@ -1,68 +1,80 @@
-# Programming for Data Science
-
 ## Assessment Reflection
-
-## Overview
 
 # Part 1: PDS_CW_part1.ipynb
 
-## Question 1.1: Reading in rows of a CSV file. 
+### Q1.1:  Reading Data from a CSV File  
 
+Reading the csv rows with optional row parameters was straightfowrd, but handling the BOM character and row indexing was challening. I transitioned from using the csv module to parsing manually with enumerate(), which made indexing clearer and solved the BOM (Byte Order Mark) issues with utf-8-sig encoding which ensure consistent csv reading across systems.  Adding try except blocks improved error handling, and improving my code from basic test code to using: 
 
-### Q1.1 – Reading Data from a CSV File
-
-The initial stage of the assignment focused on reading in data rows from a CSV file. This required careful handling of optional parameters such as row ranges while preserving the integrity of the dataset. Opening the file with newline='' ensured line breaks were interpreted correctly across platforms, and encoding='utf-8' guaranteed consistent decoding (Python Software Foundation, 2025).
-
-One challenge I encountered was the presence of a Byte Order Mark (BOM) in the first column header which appeared as '\ufeffcancer' due to a hidden Byte Order Mark (BOM).This affected the processing of other fuctions in the subsequent questions. 
-
-This was resolved by cleaning the header before returning the data ensuring consistency across subsequent questions. 
-A strength of this approach was addressing data quality issues at the source, although more defensive checks could have been added to further improve robustness.
-
-----------------------------------------------------------------------------------------------------------------------------------------
-
-### Q1.2: Extracting Columns from the Dataset
-
-This task built directly on the previous function by selecting specific columns and returning them in a dictionary structure. 
-
-The dataset itself used lowercase column names, but the function included error handling to catch cases where the user might input an invalid column name, whether due to case sensitivity, typographical errors, or missing headers. This prevented the program from breaking. 
-
-Reusing the CSV reading logic from Q1.1 reduced duplication and improved clarity.
-A strength of this approach was robustness: it could safely handle unexpected user input while remaining functional for subsequent tasks like distance calculations or table generation.
-
-A potential improvement for the csv_cols function would be to automatically convert numeric columns from strings to appropriate numeric types (int or float). This would improve the robustness of subsequent calculations, such as Euclidean distance, and reduce the need for repetitive type conversion elsewhere in the code
-
-----------------------------------------------------------------------------------------------------------------------------------------
-
-### Q1.3 – Computing Euclidean Distance
-
-Calculating the Euclidean distance between two lists required careful validation of inputs. Ensuring that both lists were of equal length prevented logical errors during computation. Implementing the Euclidean distance function raised a decision about using math.sqrt() versus the built-in exponent operator (**0.5) the latter was chosen which allowed the function to remain simple and rely only on Python’s built-in features, aligning with the assignment brief of using only built-in Python functions and operators, avoiding unnecessary imports from the math library.
-
----------------------------------------------------------------------------------------------------------------------------------------
-
-### Q1.4 – Calculating a Table of Pair-Wise Distances
-
-This question involved combining earlier functions to compute pair-wise distance between columns. Iterating over column pairs while reusing the Euclidean distance function helped maintain modularity.
-
-A key challenge was ensuring that all values were numeric before distance calculations, particularly when working with the full dataset. Once resolved, the function produced a symmetric distance table as expected. This was because of the dictionary returned by csv_cols stores all values as strings, and arithmetic operations like subtraction and exponentiation cannot be performed on strings. To resolve this, values were converted to floats before calling the Euclidean distance function:
-
-```python
-
-col1 = [float(x) for x in data[p]]
-col2 = [float(x) for x in data[q]]
-
+```python 
+if __name__ == "__main__":
 ```
-
-After this conversion, the function produced a symmetric distance table as expected, meaning the distance from column A to B is the same as from B to A  (Wikipedia, 2025). 
-
-I made use of python nested loop to compute the distance table, but Python’s loops can become slow with large datasets. A potential improvement would be to use vectorized operations using libraries like NumPy to optimize speed, which perform mathematical computations on whole arrays at once rather than one element at a time (Harris et al., 2020; Van Der Walt et al., 2011).
-
-----------------------------------------------------------------------------------------------------------------------------------------
-
-### Q1.5 – Printing a Custom Distance Table
-
-The final task focused on presenting the pair-wise distance results in a readable and structured format. Aligning columns and controlling spacing required experimentation with string formatting and column widths, as some column names initially appeared merged due to insufficient spacing. Introducing an optional column width parameter improved readability while keeping the function interface simple.
-
-Rounding values and enforcing consistent spacing resulted in a clean, well structured table output. Separating the presentation logic from the distance calculations also improved flexibility, as changes to formatting could be made without affecting the underlying computations.
+enabled testing code without pytest and this was used in subsequent questions.
 
 
+### Q1.2: Extracting Columns from the Dataset 
 
+In the initial approach, I looped through each column using list comprehension but was inefficient due to multiple rows iteration. 
+I improved the version to use zip(*) to efficiently structure the data.
+
+I added validation checks to ensure all requested columns exist before processing, which handled extreme cases of empty data by returning a dictionary with empty lists.
+
+The use of f-strings in error messages improved clarity by showing which specific column was missing.
+Key takeaways include learning how zip() can efficiently structure data, validating inputs early should happen before processing to avoid wasted computation, and reusing existing functions promote modularity and reduce code duplication. 
+
+
+### Q1.3: Computing Euclidean Distance  
+In this task incorrectly added the import math module in the function, which violated the coursework instruction, but was replaced and i made use of (** 0.5) the equivalent.
+
+I made improvements by transiitioning from list comprehensiom and sum() to an iterative approach which manually accumulate (sum_sq_diff).
+
+This allowed better control over converting data types because CSV files are read as strings and this would throw an error in the calculation phase. The input validation for equal length was consistent in both versions as it's essential during the mathemtical operation. 
+
+### Q1.4 – Calculating a Table of Pair-Wise Distances  
+
+Computing pairwise distances was done using nested loops and re using the euclidean_distance() function. The main challenge was handling data type, the initial version was converting strings to floats inside the loops, which was redundant. 
+
+The updated version relies on using euclidean_distance() for converting and creating the distance matrix to improve readability. 
+
+### Q1.5 – Printing a Custom Distance Table 
+
+I refactored my code from allowing optional column width to a fixed width, add space for alignment, including row labels, and reducing decimals from 4 to 2 for cleaner output. The main improvement was making the table more readable by adding both column and row headers, which makes it easier to identify which columns are being compared.
+
+I had issues with overlapping names in the table but resolved it by editing the column width, formatting good tables requires balancing width precision with readability which significantly improve table interpretation.  
+
+
+# Part 2: PDS_CW_part2.ipynb
+
+### Q2.1: Explore the dataset
+Making use of pandas and seaborn for data exploration made the work flow seamless. Just one challenge I encountered was trying to plot a grouped bar plot of multiple disorders by country. I was able to resolved it by using the melt() funcion.    
+
+### Q2.2: Detect and Remove outliers 
+
+Detecting outliers wasnt an issues for me, but making the decision of keeping or dropping these points was conflicting for me. I had a thousand rows of outliers to drop but theses points are valid data points that reflects extreme mental health conditions in that region/entity. 
+From a data scientist point of view, dropping that amount seems to violate data handling principles. To maintain data integrity while following the course work instructions, I narrowed  down the outlier removal to my interesting patterns (anxiety and depression), removing a total of 222 rows instaed of a thousnad rows.
+
+
+### Q2.3 Hypothesis Testing
+Making use of the filtered dataset which was suitable for correlation analysis test, this task was straightforward and easy to provide interpreataion to the results of the test. Implementation was simplied and results showed a significant correlation validating findings from q2.1.    
+
+### Conclusion
+This tasks was highly interractive as it took me through each phase of data science data handling process, from using only python inbulit function to using external libraries for exploratory data analysis, to data cleaning, data validation and hypothesis testing to support insights.
+
+
+### AI Usage statement
+- Chatgpt (Open AI, 2026) was consulted specifically in Q1.1 to debug BOM character issue when reading csv files and q2.1 in un derstanding how to use the melt() function in grouping data using a grouped barplot.
+
+- The AI suggested using utf-8-sig encoding, which I then reasearched in pythons documentation to understand how it works.
+
+- For Q2.1 I was directed  to pandas documentation (V2.33) where i studied how to use the function for data visualisation.
+
+- The AI solutions was tested with the provided dataset to ensure that it was correctly handled, validated and adapted to meet the coursewrok requiremnet. 
+
+- All other codes and analysis were developed independently based on course materials, python and pandas documentation.
+
+### Refereneces
+Pandas Development Team (2026) pandas.melt — pandas documentation. Available from: https://pandas.pydata.org/docs/reference/api/pandas.melt.html [Accessed 9 January 2026]
+
+Python Software Foundation (2026) Unicode HOWTO. Available from: https://docs.python.org/3/howto/unicode.html [Accessed 19 December 2025]
+
+Python Software Foundation (2026) codecs — Codec registry and base classes. Available from: https://docs.python.org/3/library/codecs.html [Accessed 19 December 2026]
