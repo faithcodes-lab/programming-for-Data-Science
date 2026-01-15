@@ -62,6 +62,7 @@ This tasks was highly interractive as it took me through each phase of data scie
 
 
 ### AI Usage statement
+
 - Chatgpt (Open AI, 2026) was consulted specifically in Q1.1 to debug BOM character issue when reading csv files and q2.1 in un derstanding how to use the melt() function in grouping data using a grouped barplot.
 
 - The AI suggested using utf-8-sig encoding, which I then reasearched in pythons documentation to understand how it works.
@@ -73,6 +74,7 @@ This tasks was highly interractive as it took me through each phase of data scie
 - All other codes and analysis were developed independently based on course materials, python and pandas documentation.
 
 ### Refereneces
+
 Pandas Development Team (2026) pandas.melt — pandas documentation. Available from: https://pandas.pydata.org/docs/reference/api/pandas.melt.html [Accessed 9 January 2026]
 
 Python Software Foundation (2026) Unicode HOWTO. Available from: https://docs.python.org/3/howto/unicode.html [Accessed 19 December 2025]
